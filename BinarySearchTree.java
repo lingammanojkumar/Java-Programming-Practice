@@ -1,66 +1,79 @@
-package Trees;
-//Binary search tree complexity is O(log n) ,it is more efficient than binary tree
-import java.util.*;
-class Node{
+package datastructures;
+class NodeSearch{
 	int data;
-	Node left;
-	Node right;
-	public Node(int data) {
+	NodeSearch right,left;
+	NodeSearch(int data){
 		this.data=data;
-		this.left=null;
-		this.right=null;
+		right=null;
+		left=null;
 	}
+
+static void preorder(NodeSearch root)
+{
+	if(root==null) return;
+	System.out.print(root.data+" ");
+	preorder(root.left);
+	preorder(root.right);
 }
-public class BinarySearchTree {
-public Node insert(Node root,int newData) {
-	Node newNode=new Node(newData);
+static void inorder(NodeSearch root)
+{
+	if(root==null) return;
+	inorder(root.left);
+	System.out.print(root.data+" ");
+	inorder(root.right);
+}
+static void postorder(NodeSearch root) {
+	if(root==null) return;
+	postorder(root.left);
+	postorder(root.right);
+	System.out.print(root.data+" ");
+}
+static NodeSearch insert(int data,NodeSearch root) {
 	if(root==null) {
-		root=newNode;// create new node if tree is empty
+		root=new NodeSearch(data);
+		return root;
 	}
-	if(newData<root.data) {
-		root.left=insert(root.left,newData);
-	}
-	if(newData>root.data) {
-		root.right=insert(root.right,newData);
+	if(data<root.data) {
+		root.left=insert(data,root.left);
+	}else {
+		root.right=insert(data,root.right);
 	}
 	return root;
 }
-
-//In-order traversal (Left → Root → Right)
-public void inOrder(Node root) {
-	if(root==null) {
-		return;
-	}  else {
-		inOrder(root.left);
-		System.out.print(root.data+" ");
-		inOrder(root.right);
-	}
+static boolean search(int key,NodeSearch root) {
+	if(root==null) return false;
+	if(root.data==key) return true;
+	else if(key<root.data) return search(key,root.left);
+	else  return search(key,root.right);
 }
+}
+public class BinarySearchTree {
+
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-  Scanner sc=new Scanner(System.in);
-  BinarySearchTree bst=new BinarySearchTree();
-  Node root=null;
-  System.out.println("Enter the no.of elements:");
-  int node=sc.nextInt();
-  System.out.println("The Elements are:");
-  for(int i=0;i<node;i++)
-  {
-	  int val=sc.nextInt();
-	  root=bst.insert(root,val);
-  }
-  System.out.print("The Inorder Traversal is:");
-  bst.inOrder(root);
+    NodeSearch root=NodeSearch.insert(50,null);
+    NodeSearch.insert(30,root);
+    NodeSearch.insert(60, root);
+    NodeSearch.insert(80, root);
+    System.out.println(NodeSearch.search(60, root));
+    System.out.println("Inorder Traversal: ");
+    NodeSearch.inorder(root);    
+    System.out.println();
+    System.out.println("Postorder Traversal: ");
+    NodeSearch.preorder(root);;
+    System.out.println();
+    System.out.println("Postorder Traversal: ");
+    NodeSearch.postorder(root);
+    System.out.println();
 	}
 
 }
 /*
-Enter the no.of elements:
-4
-The Elements are:
-12
-8
-15
-4
-The Inorder Traversal is:4 8 12 15 
+true
+Inorder Traversal: 
+30 50 60 80 
+Postorder Traversal: 
+50 30 60 80 
+Postorder Traversal: 
+30 80 60 50 
 */
